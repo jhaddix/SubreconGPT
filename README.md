@@ -19,7 +19,6 @@ pip install openai
 You can run the script from the command line like this:
 
 ```bash
-Copy code
 chaos -d yourdomain.com | python subrecongpt.py --apikey YOUR_OPENAI_API_KEY
 ```
 Replace yourdomain.com with the domain you're investigating and YOUR_OPENAI_API_KEY with your actual OpenAI API key.
