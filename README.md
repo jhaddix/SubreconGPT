@@ -47,7 +47,7 @@ Resolved subdomains are printed with a clear message and their IP address. The I
 ## Notes
 
 - The script will pause for 1 second between each set of subdomains to prevent over-requesting the OpenAI API.
-- The script can handle wildcard subdomains. If an input subdomain contains a '', the script will replace the '' with the AI's guesses.
+- The script will skip wildcard domains. If an input subdomain contains a '', the script will skip it.
 
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
