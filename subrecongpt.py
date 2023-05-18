@@ -4,18 +4,28 @@ import argparse
 import sys
 import time
 
+
 def generate_subdomains(subdomain, domain, api_key):
     openai.api_key = api_key
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": f"Generate 5 subdomains similar to {subdomain}."},
-        ],
-    )
-    ai_generated_subdomains = [f"{sub}.{domain}" for sub in response['choices'][0]['message']['content'].strip().split('\n')]
+    while True:  # Continue trying until a successful API call is made
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": f"Generate 5 subdomains similar to {subdomain}."},
+                ],
+            )
+            ai_generated_subdomains = [f"{sub}.{domain}" for sub in response['choices'][0]['message']['content'].strip().split('\n')]
 
-    return ai_generated_subdomains
+            return ai_generated_subdomains
+        except openai.error.RateLimitError as e:
+            print("Rate limit exceeded. Sleeping for 20 seconds...")
+            time.sleep(20)  # Sleep for 20 seconds and then try again
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+            raise e  # If it's a different kind of error, raise it
+
 
 def resolve_subdomains(subdomains):
     resolved_subdomains = []
@@ -39,6 +49,7 @@ def main():
 
     lines = [line.strip() for line in sys.stdin]
 
+
     for line in lines:
         if '*' in line:  # Skip wildcard domains
             continue
@@ -48,6 +59,8 @@ def main():
         print(f"Guesses: {', '.join([sub.split('.')[0] for sub in new_subdomains])}\n")
         resolved_subdomains = resolve_subdomains(new_subdomains)
         time.sleep(1)  # Pause for 1 second
+
+
 
 if __name__ == "__main__":
     main()
