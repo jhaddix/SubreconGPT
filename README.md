@@ -1,4 +1,4 @@
-# SubreconGTP
+# SubreconGPT
 
 This (VERY BETA) Python script performs AI-assisted subdomain discovery. It takes a list of subdomains as input, generates similar subdomains using the OpenAI GPT-3 model, and attempts to resolve these subdomains.
 
